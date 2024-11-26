@@ -1,0 +1,8 @@
+polars==0.20.21
+requests==2.31.0
+pandas~=2.2.2
+boto3~=1.35.31
+SQLAlchemy~=2.0.34
+yfinance~=0.2.44
+beautifulsoup4~=4.12.3
+blpapi~=3.24.4
