@@ -5,4 +5,3 @@ boto3~=1.35.31
 SQLAlchemy~=2.0.34
 yfinance~=0.2.44
 beautifulsoup4~=4.12.3
-finnhub
