@@ -1,7 +1,6 @@
 import datetime
 import os
 
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
@@ -26,9 +25,8 @@ def get_stock_price(ticker):
     Function to extract latest stock prices for top 100 ESG stocks
 
     """
-    # load_dotenv()
-    # my_key = os.getenv('FH_API_KEY')
-    finnhub_client = finnhub.Client(api_key="cra916hr01qhk4bplqogcra916hr01qhk4bplqp0")
+    my_key = os.getenv('FH_API_KEY')
+    finnhub_client = finnhub.Client(api_key=my_key)
 
     stock_data = finnhub_client.quote(ticker)
 
