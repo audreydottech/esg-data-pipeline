@@ -1,12 +1,12 @@
 import datetime
 import os
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
 import finnhub
 import polars as pl
-
 
 tickers = ['BXBLY', 'VWDRY', 'SMTGY']
 
@@ -27,8 +27,8 @@ def get_stock_price(ticker):
 
     """
     # load_dotenv()
-    my_key = os.getenv('FH_API_KEY')
-    finnhub_client = finnhub.Client(api_key=my_key)
+    # my_key = os.getenv('FH_API_KEY')
+    finnhub_client = finnhub.Client(api_key="cra916hr01qhk4bplqogcra916hr01qhk4bplqp0")
 
     stock_data = finnhub_client.quote(ticker)
 
@@ -50,7 +50,6 @@ def getStockPrices(ticker_list):
 
     for ticker in ticker_list:
         res = get_stock_price(ticker)
-        # print(res)
         stock_price_list.append(res)
 
     pl.DataFrame(stock_price_list).write_parquet('data/esg-stock-prices.parquet')
@@ -87,7 +86,7 @@ def get_stock_news(ticker):
         article_text = get_article_text(article['link'])
         article[K] = article_text
         # reformat timestamp
-        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime("%Y-%m-%d")
+        article['providerPublishTime'] = (datetime.datetime.fromtimestamp(article['providerPublishTime']).date())
 
         article.pop('thumbnail', None)
         article.pop('type', None)
@@ -101,13 +100,20 @@ def getStockNews(ticker_list):
     Function to write all stock news
 
     """
+    end_date = datetime.datetime.now().date()
+    start_date = end_date - datetime.timedelta(days=15)
+
     stock_news_list = []
     for ticker in ticker_list:
         res = get_stock_news(ticker)
-        # print(res)
         stock_news_list.append(res)
 
-    pl.DataFrame(stock_news_list).write_parquet('data/esg-stock-news.parquet')
+    for item in stock_news_list:
+        df = pl.DataFrame(item)
+        df2 = df.filter(
+            pl.col("providerPublishTime").is_between(start_date, end_date),
+        )
+        df2.write_parquet('data/esg-stock-news.parquet')
 
 
 # def get_top100():
@@ -118,4 +124,3 @@ def getStockNews(ticker_list):
 
 
 # def match_top100_to_ticker_symbol():
-
