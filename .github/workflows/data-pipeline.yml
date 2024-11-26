@@ -17,8 +17,8 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
-          cache: 'pip' # to avoid reinstalling libraries
+          python-version: '3.12'
+          cache: 'pip3' # to avoid reinstalling libraries
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run data pipeline
