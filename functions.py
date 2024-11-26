@@ -87,7 +87,7 @@ def get_stock_news(ticker):
         article_text = get_article_text(article['link'])
         article[K] = article_text
         # reformat timestamp
-        article['providerPublishTime'] = datetime.fromtimestamp(article['providerPublishTime']).strftime("%Y-%m-%d")
+        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime("%Y-%m-%d")
 
         article.pop('thumbnail', None)
         article.pop('type', None)
