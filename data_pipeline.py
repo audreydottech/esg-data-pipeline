@@ -2,7 +2,7 @@ from functions import *
 import time
 import datetime
 
-tickers = ['BXBLY', 'VWDRY', 'SMTGY']
+tickers = ['SMSMY', 'BXBLY', 'VWDRY', 'SMTGY', 'TPE', 'NDX1', 'BDORY', 'SBGSY', 'CHRH', 'STN']
 
 print("Starting data pipeline at ", datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 print("----------------------------------------------")

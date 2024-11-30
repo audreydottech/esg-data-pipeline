@@ -1,13 +1,15 @@
 import datetime
+import json
 import os
 
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
 import finnhub
 import polars as pl
 
-tickers = ['BXBLY', 'VWDRY', 'SMTGY']
+tickers = ['SMSMY', 'BXBLY', 'VWDRY', 'SMTGY', 'TPE', 'NDX1', 'BDORY', 'SBGSY', 'CHRH', 'STN']
 
 
 def update_json_keys(data, old_keys, new_keys):
@@ -50,7 +52,11 @@ def getStockPrices(ticker_list):
         res = get_stock_price(ticker)
         stock_price_list.append(res)
 
-    pl.DataFrame(stock_price_list).write_parquet('data/esg-stock-prices.parquet')
+    # pl.DataFrame(stock_price_list).write_csv('data/esg-stock-prices.csv')
+
+    df2 = pl.DataFrame(stock_price_list)
+    with open("data/esg-stock-prices.csv", mode="a") as f:
+        df2.write_csv(f, include_header=False)
 
 
 def get_article_text(url: str) -> str:
@@ -76,16 +82,12 @@ def get_stock_news(ticker):
     stock = yf.Ticker(ticker)
     news = stock.news
 
-    # add a key to the original dictionary
-    K = "text"
-
-    # scrape text from link and add to results
+    # reformat timestamp to string to avoid JSON serialization issue at write time
     for article in stock.news:
-        article_text = get_article_text(article['link'])
-        article[K] = article_text
-        # reformat timestamp
-        article['providerPublishTime'] = (datetime.datetime.fromtimestamp(article['providerPublishTime']).date())
+        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
+            '%Y-%m-%d')
 
+        # remove less critical data elements
         article.pop('thumbnail', None)
         article.pop('type', None)
         article.pop('uuid', None)
@@ -95,30 +97,43 @@ def get_stock_news(ticker):
 
 def getStockNews(ticker_list):
     """
-    Function to write all stock news
+    Function to write/append the latest stock news to a JSON file
 
     """
     end_date = datetime.datetime.now().date()
-    start_date = end_date - datetime.timedelta(days=15)
+    start_date = end_date - datetime.timedelta(days=1)
 
-    stock_news_list = []
     for ticker in ticker_list:
-        res = get_stock_news(ticker)
-        stock_news_list.append(res)
+        entry = get_stock_news(ticker)
 
-    for item in stock_news_list:
-        df = pl.DataFrame(item)
-        df2 = df.filter(
-            pl.col("providerPublishTime").is_between(start_date, end_date),
-        )
-        df2.write_parquet('data/esg-stock-news.parquet')
+        # If the JSON file does not exist, create it
+        if not os.path.isfile('data/esg-stock-news.json'):
+            with open('data/esg-stock-news.json', mode='w') as f:
+                f.write(json.dumps(entry, indent=2))
+        else:
+            # safety measure to make sure there is no duplicate content
+            for article in entry:
+                time = article.get('providerPublishTime')
+                # convert date strings back to date object to filter content by date range
+                time_date = datetime.datetime.strptime(time, '%Y-%m-%d').date()
+                if start_date < time_date < end_date:
+                    print(article)
+
+                # This removes the final ']' to avoid JSON syntax errors after a new write
+                    with open('data/esg-stock-news.json', 'rb+') as f:
+                        f.seek(-1, os.SEEK_END)
+                        f.truncate()
+
+                    # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
+                    with open('data/esg-stock-news.json', mode='a') as f:
+                        f.write(',')
+                        f.write(json.dumps(article, indent=2))
+                        f.write(']')
 
 
-# def get_top100():
-#     df1 = pd.read_csv('2024-Global-100-full-dataset.csv')
-#     top_100_2024 = df1[' Name']
-#
-#     return top_100_2024
+# getStockNews(tickers)
 
-
-# def match_top100_to_ticker_symbol():
+# with open('data/esg-stock-news.json') as f:
+#     data = json.load(f)
+#     df = pd.json_normalize(data)
+#     print(df)
