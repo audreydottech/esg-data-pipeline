@@ -3,13 +3,14 @@ import os
 
 import polars as pl
 import s3fs
-import boto3
 
+import boto3
 
 my_aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 my_aws_access_secret_key = os.getenv('AWS_ACCESS_SECRET_KEY')
 
 fs = s3fs.S3FileSystem(key=my_aws_access_key_id, secret=my_aws_access_secret_key)
+
 
 def grab_latest_news_from_Github():
     """
@@ -54,4 +55,3 @@ def upload_file_to_s3():
     s3.upload_file('data/esg-stock-news.json', 'environmental-stock-data-bucket', 'esg-stock-news.json')
 
     s3.upload_file('data/esg-stock-prices.csv', 'environmental-stock-data-bucket', 'esg-stock-prices.csv')
-
