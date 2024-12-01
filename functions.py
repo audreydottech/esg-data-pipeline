@@ -131,9 +131,5 @@ def getStockNews(ticker_list):
                         f.write(']')
 
 
-# getStockNews(tickers)
-
-# with open('data/esg-stock-news.json') as f:
-#     data = json.load(f)
-#     df = pd.json_normalize(data)
-#     print(df)
+destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
+print(destination)
