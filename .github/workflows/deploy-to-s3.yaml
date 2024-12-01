@@ -1,7 +1,7 @@
 name: s3-data-pipeline-workflow
 
 on:
-  push
+  workflow_dispatch:
 
 env:
   BUCKET_NAME: 'environmental-stock-data-bucket'
