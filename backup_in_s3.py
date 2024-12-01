@@ -8,7 +8,6 @@ import boto3
 
 my_aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 my_aws_access_secret_key = os.getenv('AWS_ACCESS_SECRET_KEY')
-
 fs = s3fs.S3FileSystem(key=my_aws_access_key_id, secret=my_aws_access_secret_key)
 
 
