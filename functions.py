@@ -84,8 +84,8 @@ def get_stock_news(ticker):
 
     # reformat timestamp to string to avoid JSON serialization issue at write time
     for article in stock.news:
-        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
-            '%Y-%m-%d')
+        # article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
+        #     '%Y-%m-%d')
 
         # remove less critical data elements
         article.pop('thumbnail', None)
@@ -100,10 +100,11 @@ def getStockNews(ticker_list):
     Function to write/append the latest stock news to a JSON file
 
     """
-    end_date = datetime.datetime.now().date()
-    start_date = end_date - datetime.timedelta(days=1)
+    end_date = datetime.datetime.now()
+    start_date = end_date - datetime.timedelta(days=7)
 
     for ticker in ticker_list:
+        # print(ticker)
         entry = get_stock_news(ticker)
 
         # If the JSON file does not exist, create it
@@ -115,9 +116,9 @@ def getStockNews(ticker_list):
             for article in entry:
                 time = article.get('providerPublishTime')
                 # convert date strings back to date object to filter content by date range
-                time_date = datetime.datetime.strptime(time, '%Y-%m-%d').date()
-                if start_date < time_date < end_date:
-                    print(article)
+                publish_date = datetime.datetime.fromtimestamp(time)
+                if start_date < publish_date < end_date:
+                    # print(article)
 
                 # This removes the final ']' to avoid JSON syntax errors after a new write
                     with open('data/esg-stock-news.json', 'rb+') as f:
@@ -132,4 +133,3 @@ def getStockNews(ticker_list):
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
-print(destination)
