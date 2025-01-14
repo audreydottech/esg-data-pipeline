@@ -134,9 +134,14 @@ def getStockNews(ticker_list):
 
                 if start_ts < ts < end_ts:
                     write_news_to_json(article)
+
             except (TypeError, AttributeError, ValueError) as e:
                 logging.error(e)
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
+
+
+# small_tix = ['STN', 'SMTGY']
+# getStockNews(small_tix)
