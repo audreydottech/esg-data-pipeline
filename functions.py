@@ -102,12 +102,11 @@ def getStockNews(ticker_list):
 
                 if start_date < article_date < end_date:
                     content = item['content']
-                    # related_tickers = item['relatedTickers']
-                    # print(related_tickers)
+
                     desired_keys = {'id', 'title', 'canonicalUrl', 'pubDate'}
                     desired_output = [{k: v for (k, v) in content.items() if k in desired_keys}]
                     desired_output[0]['ticker'] = ticker
                     desired_output[0]['pubDate'] = article_date.strftime('%Y-%m-%d')
                     desired_output[0]['canonicalUrl'] = desired_output[0]['canonicalUrl']['url']
 
-                    write_news_to_json(desired_output)
+                    write_news_to_json(desired_output[0])
