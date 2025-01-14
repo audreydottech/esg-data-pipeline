@@ -116,13 +116,10 @@ def getStockNews(ticker_list):
             # safety measure to make sure there is no duplicate content
             for article in entry:
 
-                timestamp = article.get('providerPublishTime')
-                ts_int = int(timestamp)
+                time = article['providerPublishTime']
+                timestamp = datetime.datetime.fromtimestamp(time)
 
-                # convert date strings back to date object to filter content by date range
-                publish_date = datetime.datetime.fromtimestamp(ts_int)
-
-                if start_date < publish_date < end_date:
+                if start_date < timestamp < end_date:
 
                     # This removes the final ']' to avoid JSON syntax errors after a new write
                     with open('data/esg-stock-news.json', 'rb+') as f:
