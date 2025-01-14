@@ -85,8 +85,8 @@ def get_stock_news(ticker):
     # reformat timestamp to string to avoid JSON serialization issue at write time
 
     for article in stock.news:
-        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
-            '%Y-%m-%d')
+
+        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime('%Y-%m-%d %H:%M:%S')
 
         # remove less critical data elements
         article.pop('thumbnail', None)
@@ -118,7 +118,7 @@ def getStockNews(ticker_list):
                 time = article.get('providerPublishTime')
 
                 # convert date strings back to date object to filter content by date range
-                publish_date = datetime.datetime.strptime(time, '%Y-%m-%d')
+                publish_date = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
 
                 if start_date < publish_date < end_date:
 
