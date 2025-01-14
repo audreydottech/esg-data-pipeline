@@ -3,6 +3,7 @@ import json
 import os
 import time
 import logging
+from dateutil.parser import parse
 
 import requests
 from bs4 import BeautifulSoup
@@ -86,6 +87,8 @@ def get_stock_news(ticker):
     # reformat timestamp to string to avoid JSON serialization issue at write time
 
     for article in stock.news:
+        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
+            "%Y-%m-%d %H:%M:%S")
         # remove less critical data elements
         article.pop('thumbnail', None)
         article.pop('type', None)
@@ -120,7 +123,8 @@ def getStockNews(ticker_list):
 
     end_ts = time.time()
     end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=2)
+    print(type(end_date))
+    start_date = end_date - datetime.timedelta(days=7)
     start_ts = start_date.timestamp()
 
     for ticker in ticker_list:
@@ -132,7 +136,9 @@ def getStockNews(ticker_list):
             try:
                 ts = article.get('providerPublishTime')
 
-                if start_ts < ts < end_ts:
+                article_date = datetime.datetime.strptime(ts, '%Y-%m-%d %H:%M:%S')
+
+                if start_date < article_date < end_date:
                     write_news_to_json(article)
 
             except (TypeError, AttributeError, ValueError) as e:
@@ -142,6 +148,5 @@ def getStockNews(ticker_list):
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
-
 # small_tix = ['STN', 'SMTGY']
-# getStockNews(small_tix)
+# getStockNews(tickers)
