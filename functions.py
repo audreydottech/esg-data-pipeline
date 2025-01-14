@@ -85,7 +85,7 @@ def getStockNews(ticker_list):
     """
     end_date = date.today()
 
-    start_date = end_date - datetime.timedelta(days=30)
+    start_date = end_date - datetime.timedelta(days=1)
 
     for ticker in ticker_list:
 
