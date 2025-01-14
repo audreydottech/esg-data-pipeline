@@ -275,4 +275,132 @@
   "relatedTickers": [
     "STN"
   ]
-}]
+},[
+  {
+    "id": "55abb663-1497-3798-b0c1-0a85026d1b1e",
+    "title": "Recent uptick might appease Sims Limited (ASX:SGM) institutional owners after losing 3.5% over the past year",
+    "pubDate": "2025-01-13",
+    "canonicalUrl": "https://finance.yahoo.com/news/recent-uptick-might-appease-sims-025549722.html",
+    "ticker": "SMSMY"
+  }
+],[
+  {
+    "id": "34e7f2d7-95d0-3b7b-b613-de2bb6578055",
+    "title": "A Look At The Fair Value Of Brambles Limited (ASX:BXB)",
+    "pubDate": "2025-01-08",
+    "canonicalUrl": "https://finance.yahoo.com/news/look-fair-value-brambles-limited-030129503.html",
+    "ticker": "BXBLY"
+  }
+],[
+  {
+    "id": "8cfd56f0-6ab8-3a5a-9ed2-2ebad37c6db2",
+    "title": "3 Stocks Estimated To Be Trading At Discounts Ranging From 22.7% To 49.1%",
+    "pubDate": "2025-01-08",
+    "canonicalUrl": "https://finance.yahoo.com/news/3-stocks-estimated-trading-discounts-040238574.html",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "e05d9767-efa7-3534-95c9-a18bc7bb1112",
+    "title": "Vestas wins 134MW wind turbine contracts in Europe",
+    "pubDate": "2025-01-02",
+    "canonicalUrl": "https://www.power-technology.com/news/vestas-wind-turbine-contracts-europe/",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "d0906982-53ef-3b77-8530-137a2bc3e535",
+    "title": "Vestas secures 315MW offshore wind order in Japan",
+    "pubDate": "2024-12-30",
+    "canonicalUrl": "https://www.energymonitor.ai/news/vestas-offshore-wind-order-japan/",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "8593aef7-3682-3b7c-b45f-06b672a52a11",
+    "title": "Vestas secures 225MW contracts in US, Germany and New Zealand",
+    "pubDate": "2024-12-19",
+    "canonicalUrl": "https://www.power-technology.com/news/vestas-us-germany-new-zealand/",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "7a417012-7942-31ed-a175-c176f7b39f53",
+    "title": "Vestas Will Supply Turbines for 1.1-GW Scottish Offshore Wind Project",
+    "pubDate": "2024-12-16",
+    "canonicalUrl": "https://www.powermag.com/vestas-will-supply-turbines-for-1-1-gw-scottish-offshore-wind-project/",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "bdb5abed-70a7-38b6-8961-c413dad5412a",
+    "title": "Vestas wins 1.1GW order for Inch Cape offshore wind in Scotland",
+    "pubDate": "2024-12-16",
+    "canonicalUrl": "https://www.power-technology.com/news/vestas-inch-cape-offshore-wind/",
+    "ticker": "VWDRY"
+  }
+],[
+  {
+    "id": "ae07012b-1985-3f79-8cad-68b4dfa57c79",
+    "title": "We Like These Underlying Return On Capital Trends At SMA Solar Technology (ETR:S92)",
+    "pubDate": "2024-12-31",
+    "canonicalUrl": "https://finance.yahoo.com/news/underlying-return-capital-trends-sma-115711534.html",
+    "ticker": "SMTGY"
+  }
+],[
+  {
+    "id": "895631f8-9e39-3967-89cc-4c2335b372b2",
+    "title": "Are Investors Undervaluing Banco Do Brasil (BDORY) Right Now?",
+    "pubDate": "2025-01-08",
+    "canonicalUrl": "https://finance.yahoo.com/news/investors-undervaluing-banco-brasil-bdory-144014601.html",
+    "ticker": "BDORY"
+  }
+],[
+  {
+    "id": "3d12ae26-f973-3d72-8a0d-95419d8519f8",
+    "title": "BDORY or CM: Which Is the Better Value Stock Right Now?",
+    "pubDate": "2025-01-02",
+    "canonicalUrl": "https://finance.yahoo.com/news/bdory-cm-better-value-stock-164008966.html",
+    "ticker": "BDORY"
+  }
+],[
+  {
+    "id": "e97aeafb-4fcb-3722-a10c-a7e02ad57455",
+    "title": "Are Investors Undervaluing BBVA Banco Frances (BBAR) Right Now?",
+    "pubDate": "2025-01-02",
+    "canonicalUrl": "https://finance.yahoo.com/news/investors-undervaluing-bbva-banco-frances-144014122.html",
+    "ticker": "BDORY"
+  }
+],[
+  {
+    "id": "046c04b0-e567-3644-b680-d0383c89d53d",
+    "title": "Schneider Electric and the challenge to make EV chargers more accessible",
+    "pubDate": "2025-01-06",
+    "canonicalUrl": "https://www.just-auto.com/interview/schneider-electric-and-the-challenge-to-make-ev-chargers-more-accessible/",
+    "ticker": "SBGSY"
+  }
+],[
+  {
+    "id": "2f1815da-86f5-3974-91af-6a51bf692f9f",
+    "title": "Will Weakness in Stantec Inc.'s (TSE:STN) Stock Prove Temporary Given Strong Fundamentals?",
+    "pubDate": "2025-01-06",
+    "canonicalUrl": "https://finance.yahoo.com/news/weakness-stantec-inc-tse-stn-142107187.html",
+    "ticker": "STN"
+  }
+],[
+  {
+    "id": "95a0b927-6952-3113-a445-17f6df18d677",
+    "title": "MasTec Stock Surges 29% in 6 Months: Still a Buy for Investors?",
+    "pubDate": "2024-12-27",
+    "canonicalUrl": "https://finance.yahoo.com/news/mastec-stock-surges-29-6-143400195.html",
+    "ticker": "STN"
+  }
+],[
+  {
+    "id": "9f469428-af78-38f1-a0b5-470a78ab827d",
+    "title": "With EPS Growth And More, Stantec (TSE:STN) Makes An Interesting Case",
+    "pubDate": "2024-12-23",
+    "canonicalUrl": "https://finance.yahoo.com/news/eps-growth-more-stantec-tse-121825401.html",
+    "ticker": "STN"
+  }
+]]
