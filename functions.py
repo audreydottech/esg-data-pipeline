@@ -2,7 +2,7 @@ import datetime
 import json
 import os
 
-import pandas as pd
+import time
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
@@ -102,7 +102,7 @@ def getStockNews(ticker_list):
 
     """
     end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=1)
+    start_date = end_date - datetime.timedelta(days=2)
 
     for ticker in ticker_list:
 
@@ -115,11 +115,12 @@ def getStockNews(ticker_list):
         else:
             # safety measure to make sure there is no duplicate content
             for article in entry:
-                time = article.get('providerPublishTime')
+
+                timestamp = article.get('providerPublishTime')
+                ts_int = int(timestamp)
 
                 # convert date strings back to date object to filter content by date range
-                publish_date = datetime.datetime.fromtimestamp(time)
-                # , '%Y-%m-%d %H:%M:%S')
+                publish_date = datetime.datetime.fromtimestamp(ts_int)
 
                 if start_date < publish_date < end_date:
 
