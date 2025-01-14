@@ -83,9 +83,10 @@ def get_stock_news(ticker):
     news = stock.news
 
     # reformat timestamp to string to avoid JSON serialization issue at write time
+
     for article in stock.news:
-        # article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
-        #     '%Y-%m-%d')
+        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
+            '%Y-%m-%d')
 
         # remove less critical data elements
         article.pop('thumbnail', None)
@@ -115,10 +116,12 @@ def getStockNews(ticker_list):
             # safety measure to make sure there is no duplicate content
             for article in entry:
                 time = article.get('providerPublishTime')
+
                 # convert date strings back to date object to filter content by date range
-                publish_date = datetime.datetime.fromtimestamp(time)
+                publish_date = datetime.datetime.strptime(time, '%Y-%m-%d')
 
                 if start_date < publish_date < end_date:
+
                     # This removes the final ']' to avoid JSON syntax errors after a new write
                     with open('data/esg-stock-news.json', 'rb+') as f:
                         f.seek(-1, os.SEEK_END)
