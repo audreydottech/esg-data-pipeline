@@ -139,4 +139,3 @@ destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
 
-getStockNews(tickers)
