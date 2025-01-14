@@ -86,7 +86,7 @@ def get_stock_news(ticker):
 
     for article in stock.news:
 
-        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime('%Y-%m-%d %H:%M:%S')
+        # article['providerPublishTime'] = datetime.datetime.strptime(article['providerPublishTime'], '%Y-%m-%d %H:%M:%S')
 
         # remove less critical data elements
         article.pop('thumbnail', None)
@@ -118,7 +118,8 @@ def getStockNews(ticker_list):
                 time = article.get('providerPublishTime')
 
                 # convert date strings back to date object to filter content by date range
-                publish_date = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
+                publish_date = datetime.datetime.fromtimestamp(time)
+                # , '%Y-%m-%d %H:%M:%S')
 
                 if start_date < publish_date < end_date:
 
@@ -135,5 +136,4 @@ def getStockNews(ticker_list):
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
-
 
