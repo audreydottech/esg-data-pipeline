@@ -109,33 +109,41 @@ def getStockNews(ticker_list):
 
         entry = get_stock_news(ticker)
 
-        # If the JSON file does not exist, create it
-        if not os.path.isfile('data/esg-stock-news.json'):
-            with open('data/esg-stock-news.json', mode='w') as f:
-                f.write(json.dumps(entry, indent=2))
+        # safety measure to make sure there is no duplicate content
+        for article in entry:
 
-        else:
-            # safety measure to make sure there is no duplicate content
-            for article in entry:
-                try:
-                    ts = article.get('providerPublishTime')
-                    if start_ts < ts < end_ts:
+            ts = article.get('providerPublishTime')
 
-                        # This removes the final ']' to avoid JSON syntax errors after a new write
-                        with open('data/esg-stock-news.json', 'rb+') as f:
-                            f.seek(-1, os.SEEK_END)
-                            f.truncate()
+            if ts:
+                if start_ts < ts < end_ts:
+                    try:
+                        write_news_to_json(article)
+                    except (TypeError, AttributeError, ValueError) as e:
+                        logging.error(e)
 
-                        # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
-                        with open('data/esg-stock-news.json', mode='a') as f:
-                            f.write(',')
-                            f.write(json.dumps(article, indent=2))
-                            f.write(']')
-                except (TypeError, AttributeError, ValueError) as e:
-                    logging.error(e)
+
+def write_news_to_json(news_to_print):
+
+    # If the JSON file does not exist, create it
+    if not os.path.isfile('data/esg-stock-news.json'):
+        with open('data/esg-stock-news.json', mode='w') as f:
+            f.write(json.dumps(news_to_print, indent=2))
+    else:
+        # This removes the final ']' to avoid JSON syntax errors after a new write
+        with open('data/esg-stock-news.json', 'rb+') as f:
+            f.seek(-1, os.SEEK_END)
+            f.truncate()
+
+        # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
+        with open('data/esg-stock-news.json', mode='a') as f:
+            f.write(',')
+            f.write(json.dumps(news_to_print, indent=2))
+            f.write(']')
+
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
 
+write_news_to_json()
