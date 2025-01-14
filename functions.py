@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 import time
+import logging
 
 import requests
 from bs4 import BeautifulSoup
@@ -85,7 +86,6 @@ def get_stock_news(ticker):
     # reformat timestamp to string to avoid JSON serialization issue at write time
 
     for article in stock.news:
-
         # remove less critical data elements
         article.pop('thumbnail', None)
         article.pop('type', None)
@@ -117,19 +117,26 @@ def getStockNews(ticker_list):
         else:
             # safety measure to make sure there is no duplicate content
             for article in entry:
-                ts = article.get('providerPublishTime')
-                if start_ts < ts < end_ts:
+                try:
+                    ts = article.get('providerPublishTime')
+                    if start_ts < ts < end_ts:
 
-                    # This removes the final ']' to avoid JSON syntax errors after a new write
-                    with open('data/esg-stock-news.json', 'rb+') as f:
-                        f.seek(-1, os.SEEK_END)
-                        f.truncate()
+                        # This removes the final ']' to avoid JSON syntax errors after a new write
+                        with open('data/esg-stock-news.json', 'rb+') as f:
+                            f.seek(-1, os.SEEK_END)
+                            f.truncate()
 
-                    # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
-                    with open('data/esg-stock-news.json', mode='a') as f:
-                        f.write(',')
-                        f.write(json.dumps(article, indent=2))
-                        f.write(']')
+                        # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
+                        with open('data/esg-stock-news.json', mode='a') as f:
+                            f.write(',')
+                            f.write(json.dumps(article, indent=2))
+                            f.write(']')
+                except (TypeError, AttributeError, ValueError) as e:
+                    logging.error(e)
 
 
-destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
+destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
+    datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
+
+
+getStockNews(tickers)
