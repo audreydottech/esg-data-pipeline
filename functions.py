@@ -1,8 +1,8 @@
 import datetime
 import json
 import os
-
 import time
+
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
@@ -86,8 +86,6 @@ def get_stock_news(ticker):
 
     for article in stock.news:
 
-        # article['providerPublishTime'] = datetime.datetime.strptime(article['providerPublishTime'], '%Y-%m-%d %H:%M:%S')
-
         # remove less critical data elements
         article.pop('thumbnail', None)
         article.pop('type', None)
@@ -101,8 +99,11 @@ def getStockNews(ticker_list):
     Function to write/append the latest stock news to a JSON file
 
     """
+
+    end_ts = time.time()
     end_date = datetime.datetime.now()
     start_date = end_date - datetime.timedelta(days=2)
+    start_ts = start_date.timestamp()
 
     for ticker in ticker_list:
 
@@ -112,26 +113,31 @@ def getStockNews(ticker_list):
         if not os.path.isfile('data/esg-stock-news.json'):
             with open('data/esg-stock-news.json', mode='w') as f:
                 f.write(json.dumps(entry, indent=2))
+
         else:
             # safety measure to make sure there is no duplicate content
             for article in entry:
 
-                time = article['providerPublishTime']
-                timestamp = datetime.datetime.fromtimestamp(time)
+                ts = article.get('providerPublishTime')
 
-                if start_date < timestamp < end_date:
 
-                    # This removes the final ']' to avoid JSON syntax errors after a new write
-                    with open('data/esg-stock-news.json', 'rb+') as f:
-                        f.seek(-1, os.SEEK_END)
-                        f.truncate()
+                if start_ts < ts < end_ts:
+                    print(True)
+                else:
+                    print(False)
 
-                    # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
-                    with open('data/esg-stock-news.json', mode='a') as f:
-                        f.write(',')
-                        f.write(json.dumps(article, indent=2))
-                        f.write(']')
+                    # # This removes the final ']' to avoid JSON syntax errors after a new write
+                    # with open('data/esg-stock-news.json', 'rb+') as f:
+                    #     f.seek(-1, os.SEEK_END)
+                    #     f.truncate()
+                    #
+                    # # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
+                    # with open('data/esg-stock-news.json', mode='a') as f:
+                    #     f.write(',')
+                    #     f.write(json.dumps(article, indent=2))
+                    #     f.write(']')
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
+getStockNews(tickers)
