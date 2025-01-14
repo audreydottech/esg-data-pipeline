@@ -101,10 +101,10 @@ def getStockNews(ticker_list):
 
     """
     end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=7)
+    start_date = end_date - datetime.timedelta(days=1)
 
     for ticker in ticker_list:
-        # print(ticker)
+
         entry = get_stock_news(ticker)
 
         # If the JSON file does not exist, create it
@@ -117,10 +117,9 @@ def getStockNews(ticker_list):
                 time = article.get('providerPublishTime')
                 # convert date strings back to date object to filter content by date range
                 publish_date = datetime.datetime.fromtimestamp(time)
-                if start_date < publish_date < end_date:
-                    # print(article)
 
-                # This removes the final ']' to avoid JSON syntax errors after a new write
+                if start_date < publish_date < end_date:
+                    # This removes the final ']' to avoid JSON syntax errors after a new write
                     with open('data/esg-stock-news.json', 'rb+') as f:
                         f.seek(-1, os.SEEK_END)
                         f.truncate()
@@ -133,3 +132,5 @@ def getStockNews(ticker_list):
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
+
+
