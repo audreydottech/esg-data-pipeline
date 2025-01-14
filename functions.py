@@ -1,9 +1,8 @@
 import datetime
+from datetime import date, timezone
+from dateutil import parser
 import json
 import os
-import time
-import logging
-from dateutil.parser import parse
 
 import requests
 from bs4 import BeautifulSoup
@@ -61,42 +60,6 @@ def getStockPrices(ticker_list):
         df2.write_csv(f, include_header=False)
 
 
-def get_article_text(url: str) -> str:
-    """
-    Function to scrape ESG stock news
-
-    """
-    try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        article_text = ' '.join([p.get_text() for p in soup.find_all('p')])
-        return article_text
-    except:
-        return "Error retrieving article text."
-
-
-def get_stock_news(ticker):
-    """
-    Function to only retrieve relevant stock news information for a single stock
-
-    """
-    # retrieve stock news for a single stock
-    stock = yf.Ticker(ticker)
-
-    # reformat timestamp to string to avoid JSON serialization issue at write time
-
-    for article in stock.news:
-        # article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
-        #     "%Y-%m-%d %H:%M:%S")
-
-        # remove less critical data elements
-        article.pop('thumbnail', None)
-        article.pop('type', None)
-        article.pop('uuid', None)
-
-        return article
-
-
 def write_news_to_json(news_to_print):
     # If the JSON file does not exist, create it
     if not os.path.isfile('data/esg-stock-news.json'):
@@ -120,28 +83,26 @@ def getStockNews(ticker_list):
     Function to write/append the latest stock news to a JSON file
 
     """
+    end_date = date.today()
 
-    # end_ts = time.time()
-    end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=7)
-    # start_ts = start_date.timestamp()
+    start_date = end_date - datetime.timedelta(days=30)
 
     for ticker in ticker_list:
 
-        entry = get_stock_news(ticker)
+        stock = yf.Ticker(ticker)
+        stock_news = stock.news
 
         # safety measure to make sure there is no duplicate content
-        try:
-            ts = entry.get('providerPublishTime')
-            article_date = datetime.datetime.fromtimestamp(ts)
+        if stock_news is not None:
 
-            if start_date < article_date < end_date:
-                write_news_to_json(entry)
+            for item in stock_news:
 
-        except (TypeError, AttributeError, ValueError) as e:
-            logging.error(e)
+                ts = item['content']['pubDate']
+                article_date = parser.isoparse(ts[:-1]).astimezone(timezone.utc).date()
 
+                if start_date < article_date < end_date:
+                    content = item['content']
+                    desired_keys = {'id', 'title', 'link', 'pubDate'}
+                    desired_output = [{k: v for (k, v) in content.items() if k in desired_keys}]
 
-destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
-    datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
-
+                    write_news_to_json(desired_output)
