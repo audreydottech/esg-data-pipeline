@@ -82,19 +82,19 @@ def get_stock_news(ticker):
     """
     # retrieve stock news for a single stock
     stock = yf.Ticker(ticker)
-    news = stock.news
 
     # reformat timestamp to string to avoid JSON serialization issue at write time
 
     for article in stock.news:
-        article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
-            "%Y-%m-%d %H:%M:%S")
+        # article['providerPublishTime'] = datetime.datetime.fromtimestamp(article['providerPublishTime']).strftime(
+        #     "%Y-%m-%d %H:%M:%S")
+
         # remove less critical data elements
         article.pop('thumbnail', None)
         article.pop('type', None)
         article.pop('uuid', None)
 
-    return news
+        return article
 
 
 def write_news_to_json(news_to_print):
@@ -121,32 +121,27 @@ def getStockNews(ticker_list):
 
     """
 
-    end_ts = time.time()
+    # end_ts = time.time()
     end_date = datetime.datetime.now()
-    print(type(end_date))
     start_date = end_date - datetime.timedelta(days=7)
-    start_ts = start_date.timestamp()
+    # start_ts = start_date.timestamp()
 
     for ticker in ticker_list:
 
         entry = get_stock_news(ticker)
 
         # safety measure to make sure there is no duplicate content
-        for article in entry:
-            try:
-                ts = article.get('providerPublishTime')
+        try:
+            ts = entry.get('providerPublishTime')
+            article_date = datetime.datetime.fromtimestamp(ts)
 
-                article_date = datetime.datetime.strptime(ts, '%Y-%m-%d %H:%M:%S')
+            if start_date < article_date < end_date:
+                write_news_to_json(entry)
 
-                if start_date < article_date < end_date:
-                    write_news_to_json(article)
-
-            except (TypeError, AttributeError, ValueError) as e:
-                logging.error(e)
+        except (TypeError, AttributeError, ValueError) as e:
+            logging.error(e)
 
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
-# small_tix = ['STN', 'SMTGY']
-# getStockNews(tickers)
