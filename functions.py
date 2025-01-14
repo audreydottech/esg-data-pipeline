@@ -94,36 +94,7 @@ def get_stock_news(ticker):
     return news
 
 
-def getStockNews(ticker_list):
-    """
-    Function to write/append the latest stock news to a JSON file
-
-    """
-
-    end_ts = time.time()
-    end_date = datetime.datetime.now()
-    start_date = end_date - datetime.timedelta(days=2)
-    start_ts = start_date.timestamp()
-
-    for ticker in ticker_list:
-
-        entry = get_stock_news(ticker)
-
-        # safety measure to make sure there is no duplicate content
-        for article in entry:
-
-            ts = article.get('providerPublishTime')
-
-            if ts:
-                if start_ts < ts < end_ts:
-                    try:
-                        write_news_to_json(article)
-                    except (TypeError, AttributeError, ValueError) as e:
-                        logging.error(e)
-
-
 def write_news_to_json(news_to_print):
-
     # If the JSON file does not exist, create it
     if not os.path.isfile('data/esg-stock-news.json'):
         with open('data/esg-stock-news.json', mode='w') as f:
@@ -141,9 +112,31 @@ def write_news_to_json(news_to_print):
             f.write(']')
 
 
+def getStockNews(ticker_list):
+    """
+    Function to write/append the latest stock news to a JSON file
+
+    """
+
+    end_ts = time.time()
+    end_date = datetime.datetime.now()
+    start_date = end_date - datetime.timedelta(days=2)
+    start_ts = start_date.timestamp()
+
+    for ticker in ticker_list:
+
+        entry = get_stock_news(ticker)
+
+        # safety measure to make sure there is no duplicate content
+        for article in entry:
+            try:
+                ts = article.get('providerPublishTime')
+
+                if start_ts < ts < end_ts:
+                    write_news_to_json(article)
+            except (TypeError, AttributeError, ValueError) as e:
+                logging.error(e)
+
 
 destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
     datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
-
-
-write_news_to_json()
