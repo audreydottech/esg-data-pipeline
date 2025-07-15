@@ -17,7 +17,7 @@ print("---> Stock prices downloaded in", str(t1-t0), "seconds", "\n")
 
 # Step 2: extract stock news for the day
 t0 = time.time()
-getStockNews(ticker_list=tickers)
+get_historical_news(ticker_list=tickers)
 t1 = time.time()
 print("Step 1: Done")
 print("---> Stock news downloaded in", str(t1-t0), "seconds", "\n")
