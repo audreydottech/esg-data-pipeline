@@ -1,5 +1,9 @@
 import datetime
+from collections import Counter, defaultdict
 from datetime import date, timezone
+from pprint import pprint
+
+import pandas
 from dateutil import parser
 import json
 import os
@@ -62,51 +66,72 @@ def getStockPrices(ticker_list):
 
 def write_news_to_json(news_to_print):
     # If the JSON file does not exist, create it
-    if not os.path.isfile('data/esg-stock-news.json'):
-        with open('data/esg-stock-news.json', mode='w') as f:
+    if not os.path.isfile('data/esg-stock-news3.json'):
+        with open('data/esg-stock-news3.json', mode='w') as f:
+            f.write('[')
             f.write(json.dumps(news_to_print, indent=2))
+            f.write(']')
+
     else:
         # This removes the final ']' to avoid JSON syntax errors after a new write
-        with open('data/esg-stock-news.json', 'rb+') as f:
+        with open('data/esg-stock-news3.json', 'rb+') as f:
             f.seek(-1, os.SEEK_END)
             f.truncate()
 
         # This adds a comma before appending and closes the bracket to avoid JSON syntax errors
-        with open('data/esg-stock-news.json', mode='a') as f:
+        with open('data/esg-stock-news3.json', mode='a') as f:
             f.write(',')
             f.write(json.dumps(news_to_print, indent=2))
             f.write(']')
 
 
-def getStockNews(ticker_list):
-    """
-    Function to write/append the latest stock news to a JSON file
+def count_duplicates_in_file():
+    if os.path.exists('data/esg-stock-news3.json'):
+        with open('data/esg-stock-news3.json', 'r+') as file:
+            data = json.load(file)
+            temp_ids = []
 
-    """
+            for row in data:
+                if isinstance(row, dict):
+                    temp_ids.append(row['id'])
+                if isinstance(row, list):
+                    for i in row:
+                        temp_ids.append(i['id'])
+            return temp_ids
+    else:
+        pass
+        # example duplicate id: 135468074
+        # c = Counter(temp_ids)
+        # print(c)
+
+
+def get_historical_news(tickers):
+    finnhub_client = finnhub.Client(api_key=my_key)
+
     end_date = date.today()
+    # poll monthly news
+    start_date = end_date - datetime.timedelta(days=30)
 
-    start_date = end_date - datetime.timedelta(days=1)
+    temp_ids = count_duplicates_in_file()
 
-    for ticker in ticker_list:
+    for ticker in tickers:  # for each ticker, get the company's latest news
+        original_list = finnhub_client.company_news(ticker, _from=start_date, to=end_date)
 
-        stock = yf.Ticker(ticker)
-        stock_news = stock.news
+        if original_list:  # if the list of results for a specific company is not empty, store it
+            filtered_list = [x for x in original_list]
 
-        # safety measure to make sure there is no duplicate content
-        if stock_news is not None:
+            for article in filtered_list:  # I'm only interested in these values
+                desired_keys = {'id', 'datetime', 'headline', 'related', 'source', 'summary', 'url'}
+                desired_output = {k: v for (k, v) in article.items() if k in desired_keys}
+                desired_output['ticker'] = desired_output['related']  # rename a field
+                del desired_output['related']
+                desired_output['datetime'] = datetime.datetime.fromtimestamp(desired_output['datetime']).strftime(
+                    '%Y-%m-%d')  # date formatting
 
-            for item in stock_news:
+                # check for duplicate article ids
+                if temp_ids is None:
+                    write_news_to_json(desired_output)
+                else:
+                    if desired_output['id'] not in temp_ids:
+                        write_news_to_json(desired_output)
 
-                ts = item['content']['pubDate']
-                article_date = parser.isoparse(ts[:-1]).astimezone(timezone.utc).date()
-
-                if start_date < article_date < end_date:
-                    content = item['content']
-
-                    desired_keys = {'id', 'title', 'canonicalUrl', 'pubDate'}
-                    desired_output = [{k: v for (k, v) in content.items() if k in desired_keys}]
-                    desired_output[0]['ticker'] = ticker
-                    desired_output[0]['pubDate'] = article_date.strftime('%Y-%m-%d')
-                    desired_output[0]['canonicalUrl'] = desired_output[0]['canonicalUrl']['url']
-
-                    write_news_to_json(desired_output[0])
