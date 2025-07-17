@@ -111,7 +111,7 @@ def get_historical_news(tickers):
 
     end_date = date.today()
     # poll monthly news
-    start_date = end_date - datetime.timedelta(days=30)
+    start_date = end_date - datetime.timedelta(days=1)
 
     temp_ids = count_duplicates_in_file()
 
