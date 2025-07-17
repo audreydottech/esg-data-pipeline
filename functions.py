@@ -106,6 +106,7 @@ def count_duplicates_in_file():
 
 
 def get_historical_news(tickers):
+    my_key = os.getenv('FH_API_KEY')
     finnhub_client = finnhub.Client(api_key=my_key)
 
     end_date = date.today()
