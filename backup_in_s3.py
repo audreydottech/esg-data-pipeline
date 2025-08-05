@@ -1,9 +1,7 @@
 import datetime
 import os
-
 import polars as pl
 import s3fs
-
 import boto3
 
 my_aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
