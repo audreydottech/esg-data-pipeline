@@ -18,6 +18,9 @@ jobs:
       - name: Git clone the repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: pip install polars
+        
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
