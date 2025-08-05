@@ -19,7 +19,7 @@ fi
 
 # Default to us-east-1 if AWS_REGION not set.
 if [ -z "$AWS_REGION" ]; then
-  AWS_REGION="us-east-1"
+  AWS_REGION="us-east-2"
 fi
 
 # Override default AWS endpoint if user sets AWS_S3_ENDPOINT.
@@ -39,7 +39,7 @@ EOF
 
 # Sync using our dedicated profile and suppress verbose messages.
 # All other flags are optional via the `args:` directive.
-sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET} \
               --profile s3-sync-action \
               --no-progress \
               ${ENDPOINT_APPEND} $*"
