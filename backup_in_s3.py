@@ -54,3 +54,4 @@ def upload_file_to_s3():
     s3.upload_file('data/esg-stock-news3.json', 'environmental-stock-data-bucket', 'esg-stock-news3.json')
 
     s3.upload_file('data/esg-stock-prices.csv', 'environmental-stock-data-bucket', 'esg-stock-prices.csv')
+
