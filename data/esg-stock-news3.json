@@ -750,4 +750,12 @@
   "summary": "French industrial tech firm Schneider Electric is in talks to buy the remaining 35% stake in its India unit from minority partner Temasek Holdings, Bloomberg News reported on Wednesday. The deal, which is worth $1 billion, values Schneider Electric India Pvt at roughly $5 billion including debt, Bloomberg News reported, citing people familiar with the matter. Indian infrastructure major L&T divested its stake in its electrical and automation business in 2018, resulting in Schneider Electric owning a 65% stake in the Indian firm and Temasek owning the rest.",
   "url": "https://finnhub.io/api/news?id=ee1eae365e2fbaaedabb47463d3d798d39f62dfb92f2d482dca1d0b9c709a05f",
   "ticker": "SBGSY"
+},{
+  "datetime": "2025-08-04",
+  "headline": "Vestas secures 128MW Chile wind project order",
+  "id": 136199319,
+  "source": "Yahoo",
+  "summary": "Vestas will provide the V162-6.4MW turbine variant from its EnVentus platform.",
+  "url": "https://finnhub.io/api/news?id=83cd05d16b583bef34d4540aaf6e0c32abbde83f667581dfe1a14d5fdc40a9e4",
+  "ticker": "VWDRY"
 }]
