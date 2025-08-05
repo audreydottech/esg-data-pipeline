@@ -28,5 +28,6 @@ jobs:
       # Upload a file to AWS S3
       - name: Copy esg-stock-news3.json to S3
         run: |
-          aws s3 cp ./data/esg-stock-news3.json s3://${{ env.BUCKET_NAME }}/
+          # aws s3 cp ./data/esg-stock-news3.json s3://${{ env.BUCKET_NAME }}/
+          aws s3 cp ./data/esg-stock-prices.csv s3://${{ env.BUCKET_NAME }}/
 
