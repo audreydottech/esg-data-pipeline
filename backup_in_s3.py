@@ -17,9 +17,9 @@ def grab_latest_news_from_Github():
     """
     end_date = datetime.datetime.now().date()
     start_date = end_date - datetime.timedelta(days=30)
-    df = pl.read_json('data/esg-stock-news.json')
-    df = df.with_columns(pl.col('providerPublishTime').str.to_date('%Y-%m-%d'))
-    filtered_df = df.filter(pl.col("providerPublishTime").is_between(start_date, end_date))
+    df = pl.read_json('data/esg-stock-news3.json')
+    # df = df.with_columns(pl.col('providerPublishTime').str.to_date('%Y-%m-%d'))
+    filtered_df = df.filter(pl.col("datetime").is_between(start_date, end_date))
 
     destination = "s3://environmental-stock-data-bucket/esg-stock-news_" + str(
         datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
@@ -41,6 +41,8 @@ def grab_latest_prices_from_Github():
     destination = "s3://environmental-stock-data-bucket/esg-stock-prices_" + str(
         datetime.datetime.now().strftime('%Y_%m_%d')) + '.json'
 
+    print(destination)
+
     with fs.open(destination, mode='wb') as f:
         filtered_df.write_json(f)
 
@@ -51,6 +53,6 @@ def upload_file_to_s3():
     """
     s3 = boto3.client('s3', aws_access_key_id=my_aws_access_key_id,
                       aws_secret_access_key=my_aws_access_secret_key)
-    s3.upload_file('data/esg-stock-news.json', 'environmental-stock-data-bucket', 'esg-stock-news.json')
+    s3.upload_file('data/esg-stock-news3.json', 'environmental-stock-data-bucket', 'esg-stock-news3.json')
 
     s3.upload_file('data/esg-stock-prices.csv', 'environmental-stock-data-bucket', 'esg-stock-prices.csv')
