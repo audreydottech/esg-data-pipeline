@@ -1,0 +1,45 @@
+name: sync-github-data-to-s3
+
+on:
+  workflow_dispatch:
+
+env:
+  BUCKET_NAME: 'environmental-stock-data-bucket'
+  AWS_REGION: 'us-east-2'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  run-s3-data-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+        
+      - name: run s3-sync
+        uses: audreydottech/esg-data-pipeline@main
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ env.BUCKET_NAME) }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: './data/**'
+          role-session-name: s3FileUpload
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check for changes # create env variable indicating if any changes were made
+        id: git-check
+        run: |
+          git config user.name 'github-actions'
+          git config user.email 'github-actions@github.com'
+          git add .
+          git diff --staged --quiet || echo "changes=true" >> $GITHUB_ENV
+
+      - name: Commit and push if changes
+        if: env.changes == 'true' # if changes made push new data to repo
+        run: |
+          git commit -m "uploaded data to s3"
+          git push
