@@ -15,7 +15,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@masterv4
+      - uses: actions/checkout@master
       - uses: audreydottech/esg-data-pipeline@main
         with:
           args: --acl public-read --follow-symlinks --delete
