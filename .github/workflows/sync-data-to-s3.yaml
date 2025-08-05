@@ -12,14 +12,12 @@ permissions:
   contents: read
 
 jobs:
-  run-s3-data-pipeline:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v4
-        
       - name: run s3-sync
-        uses: audreydottech/esg-data-pipeline@main
+      - uses: actions/checkout@masterv4
+      - uses: audreydottech/esg-data-pipeline@main
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
