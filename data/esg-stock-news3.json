@@ -798,4 +798,20 @@
   "summary": "",
   "url": "https://finnhub.io/api/news?id=b70ef4bff9c0d97284ef28974d578cd7da13802c50946e943143e9aad61ce812",
   "ticker": "BDORY"
+},{
+  "datetime": "2025-08-13",
+  "headline": "Vestas Wind Systems A/S 2025 Q2 - Results - Earnings Call Presentation",
+  "id": 136327885,
+  "source": "SeekingAlpha",
+  "summary": "The following slide deck was published by Vestas Wind Systems A/S in conjunction with their 2025 Q2 earnings call.",
+  "url": "https://finnhub.io/api/news?id=79cf0931d5c457acf2314b79b4509465936bb53c7b729b562e893125467a62cd",
+  "ticker": "VWDRY"
+},{
+  "datetime": "2025-08-13",
+  "headline": "Vestas Wind Systems A/S (VWDRY) Q2 2025 Earnings Call Transcript",
+  "id": 136327886,
+  "source": "SeekingAlpha",
+  "summary": "Vestas Wind Systems A/S (OTCPK:VWDRY) Q2 2025 Earnings Conference Call August 13, 2025 4:00 AM ETCompany ParticipantsHenrik Andersen - Group President &...",
+  "url": "https://finnhub.io/api/news?id=0ca4bc97854c3e7c2056eae7d2f1c729ab986d339739e4a1959e8e8f0e0fc61d",
+  "ticker": "VWDRY"
 }]
