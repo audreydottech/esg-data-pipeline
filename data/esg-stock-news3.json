@@ -1038,4 +1038,20 @@
   "summary": "",
   "url": "https://finnhub.io/api/news?id=9fcb5046a0c98acfbe01311a7a95a988f267f73915a71d81609fc584ea5b45b2",
   "ticker": "BDORY"
+},{
+  "datetime": "2025-09-26",
+  "headline": "GE Vernova: Strong Business, Stretched Valuation",
+  "id": 136892893,
+  "source": "SeekingAlpha",
+  "summary": "GE Vernova (GEV) is a clean energy leader with strong execution, but its stock price has outpaced fundamentals after a 140% rally.",
+  "url": "https://finnhub.io/api/news?id=e92283866e3b0b7d0453886258ed95b97a83ea7e6bf68a581dcc84e9bfdea34c",
+  "ticker": "VWDRY"
+},{
+  "datetime": "2025-09-26",
+  "headline": "I Don't Look At My Stock Prices - August Dividend Income Report",
+  "id": 136894154,
+  "source": "SeekingAlpha",
+  "summary": "",
+  "url": "https://finnhub.io/api/news?id=7cbbf6b16638eb2f09a88f776481ae65d890caca399d51575831f99ca10c6163",
+  "ticker": "STN"
 }]
